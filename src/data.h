@@ -186,8 +186,8 @@ struct rp_screen
   int current_frame;
 
 #ifdef USE_XFT_FONT
-  XftFont *ft_font;
-  XftColor color;
+  XftFont *xft_font;
+  XftColor xft_color;
 #endif
 };
 
