@@ -160,7 +160,7 @@ struct rp_virtual
 
 struct rp_screen
 {
-  GC normal_gc;
+  GC normal_gc, inverse_gc;
   Window root, bar_window, key_window, input_window, frame_window, help_window;
   int bar_is_raised;
   int screen_num;               /* Our screen number as dictated my X */
@@ -187,7 +187,7 @@ struct rp_screen
 
 #ifdef USE_XFT_FONT
   XftFont *xft_font;
-  XftColor xft_color;
+  XftColor xft_fg_color, xft_bg_color;
 #endif
 };
 
