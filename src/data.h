@@ -396,7 +396,7 @@ struct rp_frame_undo
 typedef struct rp_xselection rp_xselection;
 struct rp_xselection
 {
-  unsigned char *text;
+  char *text;
   int len;
 };
 
