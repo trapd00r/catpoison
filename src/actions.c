@@ -58,6 +58,7 @@ static cmdret * set_padding (struct cmdarg **args);
 static cmdret * set_border (struct cmdarg **args);
 static cmdret * set_barborder (struct cmdarg **args);
 static cmdret * set_barinpadding (struct cmdarg **args);
+static cmdret * set_barsticky (struct cmdarg **args);
 static cmdret * set_inputwidth (struct cmdarg **args);
 static cmdret * set_waitcursor (struct cmdarg **args);
 static cmdret * set_winfmt (struct cmdarg **args);
@@ -129,6 +130,7 @@ init_set_vars(void)
   add_set_var ("border", set_border, 1, "", arg_NUMBER);
   add_set_var ("barborder", set_barborder, 1, "", arg_NUMBER);
   add_set_var ("barinpadding", set_barinpadding, 1, "", arg_NUMBER);
+  add_set_var ("barsticky", set_barsticky, 1, "", arg_STRING);
   add_set_var ("inputwidth", set_inputwidth, 1, "", arg_NUMBER);
   add_set_var ("waitcursor", set_waitcursor, 1, "", arg_NUMBER);
   add_set_var ("winfmt", set_winfmt, 1, "", arg_REST);
@@ -3866,6 +3868,22 @@ set_barinpadding (struct cmdarg **args)
     return cmdret_new (RET_FAILURE, "defbarborder: invalid argument");
 
   defaults.bar_in_padding = new_value;
+
+  return cmdret_new (RET_SUCCESS, NULL);
+}
+
+static cmdret *
+set_barsticky (struct cmdarg **args)
+{
+  if (args[0] == NULL)
+    return cmdret_new (RET_SUCCESS, "%s", defaults.bar_sticky ? "on":"off");
+
+  if (!strcasecmp (ARG_STRING(0), "on"))
+    defaults.bar_sticky = 1;
+  else if (!strcasecmp (ARG_STRING(0), "off"))
+    defaults.bar_sticky = 0;
+  else
+    return cmdret_new (RET_FAILURE, "barsticky: invalid argument");
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
