@@ -4332,7 +4332,7 @@ cmd_exchangeup (int interactive UNUSED, struct cmdarg **args UNUSED)
   rp_frame *frame;
 
   if ((frame = find_frame_up (current_frame())))
-    exchange_with_frame (current_screen(), current_frame(), frame);
+    exchange_with_frame (current_frame(), frame);
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
@@ -4343,7 +4343,7 @@ cmd_exchangedown (int interactive UNUSED, struct cmdarg **args UNUSED)
   rp_frame *frame;
 
   if ((frame = find_frame_down (current_frame())))
-    exchange_with_frame (current_screen(), current_frame(), frame);
+    exchange_with_frame (current_frame(), frame);
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
@@ -4354,7 +4354,7 @@ cmd_exchangeleft (int interactive UNUSED, struct cmdarg **args UNUSED)
   rp_frame *frame;
 
   if ((frame = find_frame_left (current_frame())))
-    exchange_with_frame (current_screen(), current_frame(), frame);
+    exchange_with_frame (current_frame(), frame);
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
@@ -4365,7 +4365,7 @@ cmd_exchangeright (int interactive UNUSED, struct cmdarg **args UNUSED)
   rp_frame *frame;
 
   if ((frame = find_frame_right (current_frame())))
-    exchange_with_frame (current_screen(), current_frame(), frame);
+    exchange_with_frame (current_frame(), frame);
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
@@ -4387,7 +4387,7 @@ cmd_swap (int interactive UNUSED, struct cmdarg **args)
     	return cmdret_new (RET_FAILURE, "swap: frames on different screens");
     }
 
-  exchange_with_frame (current_screen(), src_frame, dest_frame);
+  exchange_with_frame (src_frame, dest_frame);
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
