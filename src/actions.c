@@ -1049,7 +1049,12 @@ cmdret *
 cmd_unmanage (int interactive, struct cmdarg **args)
 {
   if (args[0] == NULL && !interactive)
-    return cmdret_new (RET_SUCCESS, "%s", list_unmanaged_windows());
+    {
+      char *s = list_unmanaged_windows();
+      cmdret *ret = cmdret_new (RET_SUCCESS, "%s", s);
+      free (s);
+      return ret;
+    }
 
   if (args[0])
     add_unmanaged_window(ARG_STRING(0));
@@ -1530,7 +1535,11 @@ read_keymap (struct argspec *spec, struct sbuf *s, struct cmdarg **arg)
       rp_keymap *map;
       map = find_keymap (input);
       if (map == NULL)
-        return cmdret_new (RET_FAILURE, "unknown keymap '%s'", input);
+        {
+          cmdret *ret = cmdret_new (RET_FAILURE, "unknown keymap '%s'", input);
+          free (input);
+          return ret;
+        }
       *arg = xmalloc (sizeof(struct cmdarg));
       (*arg)->type = spec->type;
       (*arg)->arg.keymap = map;
@@ -1700,6 +1709,8 @@ exec_completions (char *str)
           sbuf_clear (line);
         }
     }
+
+  sbuf_free (line);
 
   free (partial);
   pclose (file);
@@ -3476,8 +3487,8 @@ cmd_help (int interactive, struct cmdarg **args)
     {
       struct sbuf *help_list;
       char *keysym_name;
-      char *tmp;
       int i;
+      cmdret *ret;
 
       help_list = sbuf_new (0);
 
@@ -3492,10 +3503,9 @@ cmd_help (int interactive, struct cmdarg **args)
             sbuf_concat (help_list, "\n");
         }
 
-      tmp = sbuf_get (help_list);
-      free (help_list);
-
-      return cmdret_new (RET_SUCCESS, "%s", tmp);
+      ret = cmdret_new (RET_SUCCESS, "%s", sbuf_get (help_list));
+      sbuf_free (help_list);
+      return ret;
     }
 
   return cmdret_new (RET_SUCCESS, NULL);
@@ -4226,7 +4236,6 @@ cmd_unsetenv (int interactive UNUSED, struct cmdarg **args)
   s = sbuf_new(0);
   sbuf_copy (s, ARG_STRING(0));
   sbuf_concat (s, "=");
-/*   str = sbuf_free_struct (s); */
   putenv (sbuf_get(s));
   sbuf_free (s);
   return cmdret_new (RET_SUCCESS, NULL);
@@ -4238,7 +4247,6 @@ cmdret *
 cmd_info (int interactive UNUSED, struct cmdarg **args)
 {
   struct sbuf *buf;
-  char *tmp;
   if (current_window() != NULL)
     {
       rp_window *win = current_window();
@@ -4250,6 +4258,7 @@ cmd_info (int interactive UNUSED, struct cmdarg **args)
       if (win_elem)
         {
           char *s;
+          cmdret *ret;
 
           if (args[0] == NULL)
             s = defaults.info_fmt;
@@ -4257,8 +4266,9 @@ cmd_info (int interactive UNUSED, struct cmdarg **args)
             s = ARG_STRING(0);
           buf = sbuf_new (0);
           format_string (s, win_elem, buf);
-          tmp = sbuf_free_struct (buf);
-          return cmdret_new (RET_SUCCESS, "%s", tmp);
+          ret = cmdret_new (RET_SUCCESS, "%s", sbuf_get (buf));
+          sbuf_free (buf);
+          return ret;
         }
     }
 
@@ -4871,8 +4881,7 @@ fdump (rp_screen *screen)
       free (t);
     }
 
-  tmp = sbuf_get (s);
-  free (s);
+  tmp = sbuf_free_struct (s);
   return tmp;
 }
 
