@@ -4149,8 +4149,6 @@ set_bwcolor (struct cmdarg **args)
 static cmdret *
 set_virtuals (struct cmdarg **args)
 {
-  int i;
-
   if (args[0] == NULL)
     return cmdret_new (RET_SUCCESS, "%d", defaults.virtuals);
 
@@ -5909,12 +5907,9 @@ cmd_getsel (int interactive UNUSED, struct cmdarg **args UNUSED)
 cmdret *
 cmd_vdump (int interactive, struct cmdarg **args)
 {
-  char *input;
   struct cmdarg *arg;
-  int which = ARG(0, number);
 
   rp_virtual *cur;
-  rp_screen *screen = current_screen();
 
   arg = xmalloc (sizeof(struct cmdarg));
 
