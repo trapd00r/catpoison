@@ -78,6 +78,7 @@ static cmdret * set_historysize (struct cmdarg **args);
 static cmdret * set_historycompaction (struct cmdarg **args);
 static cmdret * set_historyexpansion (struct cmdarg **args);
 static cmdret * set_virtuals (struct cmdarg **args);
+static cmdret * set_screensize (struct cmdarg **args);
 
 LIST_HEAD(set_vars);
 
@@ -149,6 +150,8 @@ init_set_vars(void)
   add_set_var ("historycompaction", set_historycompaction, 1, "", arg_NUMBER);
   add_set_var ("historyexpansion", set_historyexpansion, 1, "", arg_NUMBER);
   add_set_var ("virtuals", set_virtuals, 1, "", arg_NUMBER);
+  add_set_var ("screensize", set_screensize, 2,
+               "", arg_NUMBER, "", arg_NUMBER);
 }
 
 /* rp_keymaps is ratpoison's list of keymaps. */
@@ -3815,6 +3818,28 @@ set_padding (struct cmdarg **args)
   defaults.padding_right  = r;
   defaults.padding_top    = t;
   defaults.padding_bottom = b;
+
+  return cmdret_new (RET_SUCCESS, NULL);
+}
+
+static cmdret *
+set_screensize (struct cmdarg **args)
+{
+  int w, h, i;
+
+  if (args[0] == NULL)
+    return cmdret_new (RET_SUCCESS, "%d %d",
+                              defaults.screen_width,
+                              defaults.screen_height);
+
+  w = ARG(0,number);
+  h = ARG(1,number);
+
+  defaults.screen_width = w;
+  defaults.screen_height = h;
+
+  for (i=0; i<num_screens; i++)
+    screen_update ((rp_screen *)&screens[i], w, h);
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
