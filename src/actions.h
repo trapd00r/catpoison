@@ -189,6 +189,7 @@ RP_CMD (verbexec);
 RP_CMD (version);
 RP_CMD (vdump);
 RP_CMD (vinit);
+RP_CMD (vmove);
 RP_CMD (vselect);
 RP_CMD (warp);
 RP_CMD (windows);
