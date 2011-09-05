@@ -743,6 +743,7 @@ maximize (rp_window *win)
   /* Actually do the maximizing. */
   XMoveResizeWindow (dpy, win->w, win->scr->left + win->x, win->scr->top + win->y, win->width, win->height);
   XSetWindowBorderWidth (dpy, win->w, win->border);
+  redraw_window_border (win, (win == current_window() ? win->scr->fw_color : win->scr->bw_color));
 
   XSync (dpy, False);
 }
@@ -780,6 +781,7 @@ force_maximize (rp_window *win)
   /* Resize the window to its proper maximum size. */
   XMoveResizeWindow (dpy, win->w, win->scr->left + win->x, win->scr->top + win->y, win->width, win->height);
   XSetWindowBorderWidth (dpy, win->w, win->border);
+  redraw_window_border (win, win->scr->fw_color);
 
   XSync (dpy, False);
 }

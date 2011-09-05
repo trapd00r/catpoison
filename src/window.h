@@ -70,4 +70,6 @@ void set_active_window_body (rp_window *win, int force);
 
 struct rp_child_info *get_child_info (Window w);
 
+void redraw_window_border (rp_window *win, unsigned long color);
+
 #endif /* ! _RATPOISON_LIST_H */

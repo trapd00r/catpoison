@@ -4128,7 +4128,7 @@ set_fwcolor (struct cmdarg **args)
 {
   int i;
   XColor color, junk;
-  rp_window *win = current_window();
+  rp_window *win, *cur = current_window();
 
   if (args[0] == NULL)
     return cmdret_new (RET_SUCCESS, "%s", defaults.fwcolor_string);
@@ -4145,9 +4145,11 @@ set_fwcolor (struct cmdarg **args)
       defaults.fwcolor_string = xstrdup (ARG_STRING(0));
     }
 
-  /* Update current window. */
-  if (win != NULL)
-    XSetWindowBorder (dpy, win->w, win->scr->fw_color);
+  /* Update all the visible windows. */
+  list_for_each_entry (win,&rp_mapped_window,node)
+    {
+       redraw_window_border (win, (win == cur ? win->scr->fw_color : win->scr->bw_color));
+    }
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
@@ -4177,10 +4179,8 @@ set_bwcolor (struct cmdarg **args)
   /* Update all the visible windows. */
   list_for_each_entry (win,&rp_mapped_window,node)
     {
-       if (win != cur)
-         XSetWindowBorder (dpy, win->w, win->scr->bw_color);
+       redraw_window_border (win, (win == cur ? win->scr->fw_color : win->scr->bw_color));
     }
-
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
