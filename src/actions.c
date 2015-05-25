@@ -79,6 +79,7 @@ static cmdret * set_historycompaction (struct cmdarg **args);
 static cmdret * set_historyexpansion (struct cmdarg **args);
 static cmdret * set_virtuals (struct cmdarg **args);
 static cmdret * set_screensize (struct cmdarg **args);
+static cmdret * set_gap (struct cmdarg **args);
 
 LIST_HEAD(set_vars);
 
@@ -152,6 +153,7 @@ init_set_vars(void)
   add_set_var ("virtuals", set_virtuals, 1, "", arg_NUMBER);
   add_set_var ("screensize", set_screensize, 2,
                "", arg_NUMBER, "", arg_NUMBER);
+  add_set_var ("gap", set_gap, 1, "", arg_NUMBER);
 }
 
 /* rp_keymaps is ratpoison's list of keymaps. */
@@ -4195,6 +4197,23 @@ set_virtuals (struct cmdarg **args)
     return cmdret_new (RET_FAILURE, "virtuals: invalid argument");
 
   defaults.virtuals = ARG(0,number);
+
+  return cmdret_new (RET_SUCCESS, NULL);
+}
+
+static cmdret *
+set_gap (struct cmdarg **args)
+{
+  int new_value;
+
+  if (args[0] == NULL)
+    return cmdret_new (RET_SUCCESS, "%d", defaults.gap);
+
+  new_value = ARG(0,number);
+  if (new_value < 0)
+    return cmdret_new (RET_FAILURE, "gap: invalid argument");
+
+  defaults.gap = new_value;
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
