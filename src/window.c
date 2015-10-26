@@ -413,7 +413,7 @@ give_window_focus (rp_window *win, rp_window *last_win)
   if (last_win != NULL && win != last_win)
     {
       save_mouse_position (last_win);
-      redraw_window_border (last_win, last_win->scr->bw_color);
+      XSetWindowBorder (dpy, last_win->w, last_win->scr->bw_color);
     }
 
   if (win == NULL) return;
@@ -433,31 +433,13 @@ give_window_focus (rp_window *win, rp_window *last_win)
   if (last_win != NULL) XUninstallColormap (dpy, last_win->colormap);
   XInstallColormap (dpy, win->colormap);
 
-  redraw_window_border (win, win->scr->fw_color);
+  XSetWindowBorder (dpy, win->w, win->scr->fw_color);
 
   /* Finally, give the window focus */
   rp_current_screen = win->scr->xine_screen_num;
   set_rp_window_focus (win);
 
   XSync (dpy, False);
-}
-
-void
-redraw_window_border (rp_window *win, unsigned long color)
-{
-  XGCValues gcv;
-  GC gc_line;
-
-  XSetWindowBorder (dpy, win->w, color);
-
-  gcv.foreground = color;
-  gcv.background = win->scr->bg_color;
-  gcv.function = GXcopy;
-  gcv.line_width = win->border;
-  gcv.subwindow_mode = IncludeInferiors;
-  gc_line = XCreateGC(dpy, win->scr->root,
-    GCForeground | GCBackground | GCFunction | GCLineWidth | GCSubwindowMode, &gcv);
-  XDrawRectangle(dpy, win->scr->root, gc_line, win->x + 1, win->y + 1, win->width + win->border, win->height + win->border);
 }
 
 #if 0
