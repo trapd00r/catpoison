@@ -9,6 +9,8 @@ not be suitable for pushing upstream.
 
 - A `barsticky` toggle to keep the current window title visible all the time.
 
+- Support UTF8 in text drawn in window menus and the sticky bar.
+
 - Support the `_NET_ACTIVE_WINDOW` atom.
 
 - Add a `screensize` setting (width and height) to overide the current screen
