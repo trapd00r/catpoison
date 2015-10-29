@@ -296,7 +296,7 @@ rp_draw_string (rp_screen *s, Drawable d, int style, int x, int y, char *string,
                             DefaultColormap (dpy, s->screen_num));
       if (draw)
         {
-          XftDrawString8 (draw, style == STYLE_NORMAL ? &s->xft_fg_color:&s->xft_bg_color, s->xft_font, x, y, (FcChar8*) string, length);
+          XftDrawStringUtf8 (draw, style == STYLE_NORMAL ? &s->xft_fg_color:&s->xft_bg_color, s->xft_font, x, y, (FcChar8*) string, length);
           XftDrawDestroy (draw);
         }
       else
